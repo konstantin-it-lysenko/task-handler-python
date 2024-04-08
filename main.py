@@ -2,15 +2,29 @@ from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional, List, Annotated
 from datetime import datetime
+import models
+from database import engine, SessionLocal
+from sqlalchemy.orm import Session
 from enum import Enum
 
+
 app = FastAPI()
+models.Base.metadata.create_all(bind=engine)
 
 
-class Priority(Enum):
+class Priority(str, Enum):
     low = 'low'
     medium = 'medium'
     high = 'high'
+
+
+class UserBase(BaseModel):
+    id: str
+    created_at: datetime = datetime.now()
+    updated_at: datetime
+    email: str
+    name: str
+    password: str
 
 
 class TaskBase(BaseModel):
