@@ -55,3 +55,13 @@ def get_db():
 
 
 db_dependency = Annotated[Session, Depends(get_db)]
+
+
+@app.post('user/tasks')
+async def create_task(task: TaskBase, db: db_dependency):
+    db_task = models.Tasks(name=task.name)
+    db.add(task)
+    db.commit()
+    db.refresh(task)
+
+    return task
