@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 class Task(Base):
-    __tablename__ = 'task'
+    __tablename__ = 'tasks'
 
     id = Column(String, primary_key=True, index=True)
     created_at = Column(Date, default=datetime.now())
