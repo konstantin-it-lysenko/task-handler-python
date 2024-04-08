@@ -44,3 +44,11 @@ class TimeBlockBase(BaseModel):
     color: Optional[str]
     duration: int
     order: int = 1
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
