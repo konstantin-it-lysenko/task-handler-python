@@ -1,4 +1,5 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date
+from sqlalchemy.orm import relationship
 from database import Base
 from datetime import datetime
 from argon2 import PasswordHasher
@@ -16,6 +17,9 @@ class User(Base):
     email = Column(String, unique=True)
     name = Column(String)
     password = Column(String)
+
+    tasks = relationship('Tasks', back_populates='user')
+    time_blocks = relationship('TimeBlock', back_populates='user')
 
     def set_password(self, password):
         self.password = ph.hash(password)
@@ -36,6 +40,9 @@ class Tasks(Base):
     name = Column(String, index=True)
     priority = Column(String, nullable=True)
     is_completed = Column(Boolean, default=False, nullable=True)
+    user_id = Column(String, ForeignKey('user.id'))
+
+    user = relationship('User', back_populates='task')
 
 
 class TimeBlock(Base):
@@ -48,3 +55,6 @@ class TimeBlock(Base):
     color = Column(String, nullable=True)
     duration = Column(Integer)
     order = Column(Integer, default=1)
+    user_id = Column(String, ForeignKey('user.id'))
+
+    user = relationship('User', back_populates='time_block')
