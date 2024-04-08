@@ -5,5 +5,6 @@ dist/
 build/
 
 # Virtual environment
+.env
 env/
 .venv/
