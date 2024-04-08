@@ -1,0 +1,7 @@
+# Distribution / packaging
+dist/
+build/
+
+# Virtual environment
+env/
+.venv/
