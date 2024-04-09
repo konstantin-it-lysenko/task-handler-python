@@ -6,6 +6,7 @@ import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from enum import Enum
+import uuid
 
 
 app = FastAPI()
@@ -28,12 +29,9 @@ class UserBase(BaseModel):
 
 
 class TaskBase(BaseModel):
-    id: str
-    created_at: datetime = datetime.now()
-    updated_at: datetime
     name: str
-    priority: Optional[Priority]
     is_completed: Optional[bool]
+    priority: Optional[Priority]
 
 
 class TimeBlockBase(BaseModel):
@@ -59,9 +57,11 @@ db_dependency = Annotated[Session, Depends(get_db)]
 
 @app.post('/user/tasks')
 async def create_task(task: TaskBase, db: db_dependency):
-    db_task = models.Tasks(name=task.name, priority=task.priority, is_completed=task.is_completed)
-    db.add(task)
-    db.commit()
-    db.refresh(task)
+    task_id = str(uuid.uuid4())
 
-    return task
+    db_task = models.Tasks(id=task_id, name=task.name, priority=task.priority, is_completed=task.is_completed)
+    db.add(db_task)
+    db.commit()
+    db.refresh(db_task)
+
+    return db_task
