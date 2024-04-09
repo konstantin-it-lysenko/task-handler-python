@@ -54,6 +54,22 @@ def get_db():
 db_dependency = Annotated[Session, Depends(get_db)]
 
 
+@app.get('user/tasks')
+async def get_tasks(db: db_dependency):
+    tasks = db.query(models.Tasks)
+
+    return tasks
+
+
+@app.put('/user/tasks/{task_id}')
+async def update_task(task_id: int, db: db_dependency):
+    result = db.query(models.Tasks).filter(models.Tasks.id == task_id).first()
+    if not result:
+        raise HTTPException(status_code=404, detail='Task was not found')
+
+    return result
+
+
 @app.post('/user/tasks')
 async def create_task(task: TaskBase, db: db_dependency):
     task_id = str(uuid.uuid4())
