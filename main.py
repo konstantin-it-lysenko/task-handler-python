@@ -30,7 +30,6 @@ class UserBase(BaseModel):
 
 class TaskBase(BaseModel):
     name: str
-    is_completed: Optional[bool]
     priority: Optional[Priority]
 
 
@@ -59,7 +58,7 @@ db_dependency = Annotated[Session, Depends(get_db)]
 async def create_task(task: TaskBase, db: db_dependency):
     task_id = str(uuid.uuid4())
 
-    db_task = models.Tasks(id=task_id, name=task.name, priority=task.priority, is_completed=task.is_completed)
+    db_task = models.Tasks(id=task_id, name=task.name, priority=task.priority)
     db.add(db_task)
     db.commit()
     db.refresh(db_task)
