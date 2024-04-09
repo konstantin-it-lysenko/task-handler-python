@@ -18,8 +18,8 @@ class User(Base):
     name = Column(String)
     password = Column(String)
 
-    tasks = relationship('Tasks', back_populates='user')
-    time_blocks = relationship('TimeBlock', back_populates='user')
+    # tasks = relationship('Tasks', back_populates='user')
+    # time_blocks = relationship('TimeBlock', back_populates='user')
 
     def set_password(self, password):
         self.password = ph.hash(password)
@@ -35,14 +35,14 @@ class Tasks(Base):
     __tablename__ = 'task'
 
     id = Column(String, primary_key=True, index=True)
-    created_at = Column(Date, default=datetime.now())
-    updated_at = Column(Date)
+    created_at = Column(Date, default=datetime.now(), nullable=True)
+    updated_at = Column(Date, nullable=True)
     name = Column(String, index=True)
     priority = Column(String, nullable=True)
     is_completed = Column(Boolean, default=False, nullable=True)
-    user_id = Column(String, ForeignKey('user.id'))
-
-    user = relationship('User', back_populates='task')
+    # user_id = Column(String, ForeignKey('user.id'))
+    #
+    # user = relationship('User', back_populates='task')
 
 
 class TimeBlock(Base):
@@ -55,6 +55,6 @@ class TimeBlock(Base):
     color = Column(String, nullable=True)
     duration = Column(Integer)
     order = Column(Integer, default=1)
-    user_id = Column(String, ForeignKey('user.id'))
-
-    user = relationship('User', back_populates='time_block')
+#     user_id = Column(String, ForeignKey('user.id'))
+#
+#     user = relationship('User', back_populates='time_block')
